@@ -1,0 +1,26 @@
+{
+    "name": "robclancy/xf-console",
+    "keywords": ["xenforo"],
+    "authors": [
+        {
+            "name": "Robbo",
+            "email": "robert@mercenarydesign.net"
+        }
+    ],
+    "require": {
+        "illuminate/container": "4.0.x",
+        "illuminate/console": "4.0.x"
+    },
+    "autoload": {
+        "psr-0": {
+            "XfToolkit\\Console": ""
+        }
+    },
+    "target-dir": "XfToolkit/Console",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

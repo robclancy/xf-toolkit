@@ -1,4 +1,4 @@
-xf-toolkit
+XenForo Toolkit
 ==========
 
-A toolkit to use with XenForo for development
+A toolkit to use with XenForo for development.
