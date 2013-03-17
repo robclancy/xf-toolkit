@@ -6,7 +6,7 @@ use XenForo_Application;
 
 abstract class Model {
 
-	protected function getDw($dw)
+	public function getDw($dw)
 	{
 		if (strpos($dw, '_') === false)
 		{
@@ -16,7 +16,7 @@ abstract class Model {
 		return XenForo_DataWriter::create($dw);
 	}
 
-	protected function getModel($model)
+	public function getModel($model)
 	{
 		if (strpos($model, '_') === false)
 		{
@@ -26,17 +26,17 @@ abstract class Model {
 		return XenForo_Model::create($model);
 	}
 
-	protected function getConfig()
+	public function getConfig()
 	{
 		return XenForo_Application::getConfig();
 	}
 
-	protected function getDb()
+	public function getDb()
 	{
 		return XenForo_Application::getDb();
 	}
 
-	protected function getApp()
+	public function getApp()
 	{
 		return XenForo_Application::getInstance();
 	}

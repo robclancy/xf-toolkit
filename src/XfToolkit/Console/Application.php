@@ -14,6 +14,9 @@ class Application extends App {
 		parent::__construct('XenForo Developer', '1.0-dev');
 
 		$this->setContainer($container);
+
+		$container['app'] = $this;
+		$container->alias('app', 'XfToolkit\Console\Application');
 	}
 
 	/**
@@ -72,5 +75,10 @@ class Application extends App {
 	{
 		$this->container = $container;
 		$this->setLaravel($container);
+	}
+
+	public function getContainer()
+	{
+		return $this->container;
 	}
 }

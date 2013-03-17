@@ -31,6 +31,11 @@ class AddOn extends Model {
 		return $document;
 	}
 
+	public function getById($id)
+	{
+		return $this->getModel('AddOn')->getAddOnById($id);
+	}
+
 	public function getAll()
 	{
 		return $this->getModel('AddOn')->getAllAddOns();

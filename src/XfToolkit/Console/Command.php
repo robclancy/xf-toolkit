@@ -1,7 +1,7 @@
 <?php namespace XfToolkit\Console;
 
-use Illuminate\Console\Command as BaseCommand;
 use Illuminate\Container\Container;
+use Illuminate\Console\Command as BaseCommand;
 
 class Command extends BaseCommand {
 
@@ -11,6 +11,16 @@ class Command extends BaseCommand {
 	 * @var Illuminate\Container\Container
 	 */
 	protected $container;
+
+	// TODO: docs
+	protected $application;
+
+	public function __construct(Application $app)
+	{
+		$this->application = $app;
+
+		parent::__construct();
+	}
 
 	/** 
 	 * Wrapper for $this->output->getVerbosity()

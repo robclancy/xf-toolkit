@@ -19,6 +19,7 @@ class InstallCommand extends BaseCommand {
 			throw new \RuntimeException('Not enough arguments.');
 		}
 
+		$noneInstalled = true;
 		$addOns = $this->addOnModel->getAll();
 		foreach ($files AS $file)
 		{
@@ -27,6 +28,7 @@ class InstallCommand extends BaseCommand {
 			{
 				if ($this->option('update-if-exists'))
 				{
+					$noneInstalled = false;
 					$this->updateFromXml($xml, $addOns[(string)$xml['addon_id']]);
 				}
 				else
@@ -37,11 +39,17 @@ class InstallCommand extends BaseCommand {
 			}
 			else
 			{
+				$noneInstalled = false;
 				$this->installFromXml($xml);
 			}
 		}
 
 		$this->line();
+
+		if ($noneInstalled)
+		{
+			return;
+		}
 
 		if ( ! $this->option('skip-rebuild'))
 		{

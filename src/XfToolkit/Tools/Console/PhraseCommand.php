@@ -1,6 +1,7 @@
 <?php namespace XfToolkit\Tools\Console;
 
 use XfToolkit\Console\Command;
+use XfToolkit\Console\Application;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -14,9 +15,9 @@ class PhraseCommand extends Command {
 
 	protected $phraseModel;
 
-	public function __construct(Phrase $phrase)
+	public function __construct(Application $app, Phrase $phrase)
 	{
-		parent::__construct();
+		parent::__construct($app);
 
 		$this->phraseModel = $phrase;
 	}
