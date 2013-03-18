@@ -36,8 +36,10 @@ class ExportCommand extends Command {
 	public function fire()
 	{
 		$this->addonId = $this->argument('addon-id');
-		$this->dataDirectory = trim($this->argument('data-directory'), '/').'/';
-		$this->templateDirectory = trim($this->argument('template-directory'), '/').'/';
+		$directory = rtrim($this->argument('directory'), '/');
+		$config = $this->getConfig($directory);
+		$this->dataDirectory = rtrim($config->data, '/').'/';
+		$this->templateDirectory = rtrim($config->templates, '/').'/';
 
 		if ( ! $addon = $this->addonModel->getById($this->addonId))
 		{
@@ -53,6 +55,8 @@ class ExportCommand extends Command {
 		{
 			throw new \RuntimeException('Template Directory doesn\'t exist');
 		}
+
+		$this->fileSystem->cleanDirectory($this->dataDirectory);
 
 		$dataTypes = array(
 			'Admin Navigation',
@@ -88,6 +92,8 @@ class ExportCommand extends Command {
 			//$this->line();
 		}
 
+		$this->fileSystem->cleanDirectory($this->templateDirectory);
+
 		$this->line();
 		$this->line('Exporting templates for <info>'.$addon['title'].'</info> into <comment>'.$this->templateDirectory.'</comment>');
 		foreach (array('Admin Templates', 'Templates') AS $type)
@@ -95,6 +101,60 @@ class ExportCommand extends Command {
 			$this->line('  - Exporting <info>'.$type.'</info>');
 			$this->{'export'.str_replace(' ', '', $type)}();
 		}
+	}
+
+	protected function getConfig($directory)
+	{
+		if ( ! file_exists($directory))
+		{
+			throw new \RuntimeException('Directory doesn\'t exist');
+		}
+
+		// We require a build.json file to get information about the add-on from
+		if ( ! file_exists($directory.'/xenbuild.json'))
+		{
+			throw new \RuntimeException('xenbuild.json not found, can\'t import without it');
+		}
+
+		$config = json_decode(file_get_contents($directory.'/xenbuild.json'));
+		if (is_null($config))
+		{
+			throw new \RuntimeException('xenbuild.json doesn\'t contain valid json');
+		}
+
+		$required = array('id', 'name', 'version');
+		foreach ($required AS $r)
+		{
+			if ( ! isset($config->$r))
+			{
+				throw new \RuntimeException('build.json is invalid, '.$r.' needs to be defined');
+			}
+		}
+
+		$defaults = array(
+			'version_id' => '{revision}',
+			'library' => false,
+			'installer' => false,
+			'website' => '',
+			'data' => $directory.'/data',
+			'templates' => $directory.'/templates',
+			'composer' => false,
+		);
+
+		foreach ($defaults AS $key => $value)
+		{
+			if ( ! isset($config->$key))
+			{
+				$config->$key = $value;
+			}
+		}
+
+		if ($config->library AND ! $config->installer AND file_exists($directory.'/'.$config->library.'/Installer.php'))
+		{
+			$config->installer = $config->library.'/Installer.php';
+		}
+
+		return $config;
 	}
 
 	// Some types can use this instead if the method names and models match up
@@ -188,8 +248,7 @@ class ExportCommand extends Command {
 	{
 		return array(
 			array('addon-id', InputArgument::REQUIRED, 'Add-on ID you wish to export'),
-			array('data-directory', InputArgument::REQUIRED, 'Directory to export data to'),
-			array('template-directory', InputArgument::REQUIRED, 'Directory to export templates to'),
+			array('directory', InputArgument::REQUIRED, 'Directory where the xenbuild.json file is located'),
 		);
 	}
 

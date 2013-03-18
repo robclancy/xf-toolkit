@@ -43,8 +43,17 @@ class BuildCommand extends Command {
 
 		$this->info('Creating upload directory');
 		$this->fileSystem->makeDirectory($directory.'/upload');
-		$this->fileSystem->copyDirectory($config->library, $directory.'/upload/library/');
+		$this->fileSystem->copyDirectory($config->library.'/../../', $directory.'/upload/library/');
 
+		$this->info('Updating dependencies');
+		$libs = $this->getDependencies('.');
+		$this->info('Copying dependencies into library');
+		foreach ($libs AS $lib)
+		{
+			$this->fileSystem->copyDirectory($lib, $directory.'/upload/library');
+		}
+
+		$this->info('Creating zip');
 		$zip = new \ZipArchive;
 		if ($zip->open($directory.'/'.$config->name.'_'.$config->version.'.zip', \ZIPARCHIVE::CREATE) !== true)
 		{
@@ -52,6 +61,7 @@ class BuildCommand extends Command {
 		}
 
 		// TODO: the zippy
+		// $this->info('Add-on built into '.$directory);
 	}
 
 	// FIXME: copy paste code from ImportCommand.php
@@ -106,6 +116,25 @@ class BuildCommand extends Command {
 		}
 
 		return $config;
+	}
+
+	// FIXME: another copy
+	protected function getDependencies($directory)
+	{
+		$handle = popen('cd '.$directory.' && composer update', 'r');
+		while ( ! feof($handle))
+		{
+			$this->write(fread($handle, 1024));
+		}
+		fclose($handle);
+
+		return require $directory.'/vendor/composer/autoload_namespaces.php';
+
+		/*$this->info('Copying dependencies into library');
+		foreach ($libs AS $lib)
+		{
+			$this->fileSystem->copyDirectory($lib, $this->application->getXfLibPath());
+		}*/
 	}
 
 	// FIXME: also copied, mostly

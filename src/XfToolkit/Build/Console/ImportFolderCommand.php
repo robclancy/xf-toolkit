@@ -22,7 +22,7 @@ class ImportFolderCommand extends Command {
 	}
 
 	public function fire()
-	{die('needs to be tested for library changes');
+	{
 		$directory = trim($this->argument('directory'), '/');
 
 		$config = $this->getConfig($directory);
@@ -30,12 +30,17 @@ class ImportFolderCommand extends Command {
 		if ($this->option('git-pull'))
 		{
 			// TODO: handle passwords? might use keys instead
-			shell_exec('git pull');
+			shell_exec('cd '.$directory.' && git pull');
 		}
 
 		if ($config->library)
 		{
 			$this->copyLibrary($directory.'/'.$config->library);
+		}
+
+		if ($config->composer)
+		{
+			$this->copyDependencies($directory);
 		}
 
 		$xmlPath = $this->buildAddOn($directory, $config);
@@ -78,6 +83,7 @@ class ImportFolderCommand extends Command {
 			'website' => '',
 			'data' => $directory.'/data',
 			'templates' => $directory.'/templates',
+			'composer' => false,
 		);
 
 		foreach ($defaults AS $key => $value)
@@ -102,6 +108,24 @@ class ImportFolderCommand extends Command {
 
 		$this->info('Copying library files');
 		$this->fileSystem->copyDirectory($libraryPath.'/../../', $this->application->getXfLibPath());
+	}
+
+	protected function copyDependencies($directory)
+	{
+		$handle = popen('cd '.$directory.' && composer update', 'r');
+		while ( ! feof($handle))
+		{
+			$this->write(fread($handle, 1024));
+		}
+		fclose($handle);
+
+		$libs = require $directory.'/vendor/composer/autoload_namespaces.php';
+
+		$this->info('Copying dependencies into library');
+		foreach ($libs AS $lib)
+		{
+			$this->fileSystem->copyDirectory($lib, $this->application->getXfLibPath());
+		}
 	}
 
 	protected function buildAddOn($directory, $config)
