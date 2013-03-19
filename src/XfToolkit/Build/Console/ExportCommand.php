@@ -61,14 +61,14 @@ class ExportCommand extends Command {
 		$dataTypes = array(
 			'Admin Navigation',
 			'Admin Permissions',
-			//array('code_events', false, 'appendEventsAddOnXml'),
-			//array('code_event_listeners', 'XenForo_Model_CodeEvent', 'appendEventListenersAddOnXml'),
-			//array('cron', false, 'appendCronEntriesAddOnXml'),
+			'Code Events',
+			'Code Event Listeners',
+			'Cron',
 			'Email Templates',
-			//array('options', false, false, 'optiongroups'),
+			'Options',
 			'Permissions',
 			'Phrases',
-			//array('route_prefixes', 'XenForo_Model_RoutePrefix', 'appendPrefixesAddOnXml'),
+			'Route Prefixes',
 		);
 
 		$this->line('Exporting add-on data for <info>'.$addon['title'].'</info> into <comment>'.$this->dataDirectory.'</comment>');
@@ -183,6 +183,57 @@ class ExportCommand extends Command {
 		$model->appendAdminPermissionsAddOnXml($root, $this->addonId);
 
 		return $this->saveDom($this->dataDirectory.'admin_permissions.xml', $dom);
+	}
+
+	protected function exportCodeEvents()
+	{
+		$model = $this->addonModel->getModel('CodeEvent');
+		list ($dom, $root) = $this->createNewDom('code_events');
+
+		$model->appendEventsAddOnXml($root, $this->addonId);
+
+		return $this->saveDom($this->dataDirectory.'code_events.xml', $dom);
+	}
+
+	protected function exportCodeEventListeners()
+	{
+		$model = $this->addonModel->getModel('CodeEvent');
+		list ($dom, $root) = $this->createNewDom('code_event_listeners');
+
+		$model->appendEventListenersAddOnXml($root, $this->addonId);
+
+		return $this->saveDom($this->dataDirectory.'code_event_listeners.xml', $dom);
+	}
+
+	protected function exportCron()
+	{
+		$model = $this->addonModel->getModel('Cron');
+		list ($dom, $root) = $this->createNewDom('cron');
+
+		$model->appendCronEntriesAddOnXml($root, $this->addonId);
+
+		return $this->saveDom($this->dataDirectory.'cron.xml', $dom);
+	}
+
+	protected function exportOptions()
+	{
+		$model = $this->addonModel->getModel('Option');
+		list ($dom, $root) = $this->createNewDom('optiongroups');
+
+		$model->appendOptionsAddOnXml($root, $this->addonId);
+
+		return $this->saveDom($this->dataDirectory.'options.xml', $dom);
+	}
+
+	//array('route_prefixes', 'XenForo_Model_RoutePrefix', 'appendPrefixesAddOnXml'),
+	protected function exportRoutePrefixes()
+	{
+		$model = $this->addonModel->getModel('RoutePrefix');
+		list ($dom, $root) = $this->createNewDom('route_prefixes');
+
+		$model->appendPrefixesAddOnXml($root, $this->addonId);
+
+		return $this->saveDom($this->dataDirectory.'route_prefixes.xml', $dom);
 	}
 
 	protected function exportAdminTemplates()

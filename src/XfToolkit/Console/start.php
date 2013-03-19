@@ -8,7 +8,7 @@ $application = new Application(new Container);
 
 // FIXME: detect XenForo somewhere else so we can add $skipXenForo to a command instance instead
 $hackySkipXenForo = array(
-	'build'
+	'build', 'addon:create'
 );
 if ( ! isset($_SERVER['argv'][1]) OR in_array($_SERVER['argv'][1], $hackySkipXenForo))
 {

@@ -7,6 +7,9 @@ class AddOnServiceProvider implements ServiceProvider {
 
 	public function register(Application $application)
 	{
-		$application->resolve('XfToolkit\AddOn\Console\InstallCommand');
+		$application->resolveCommands(
+			'XfToolkit\AddOn\Console\InstallCommand',
+			'XfToolkit\AddOn\Console\CreateCommand'
+		);
 	}
 }

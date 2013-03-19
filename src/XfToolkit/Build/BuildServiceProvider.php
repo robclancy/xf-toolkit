@@ -9,6 +9,7 @@ class BuildServiceProvider implements ServiceProvider {
 	{
 		$application->resolveCommands(
 			'XfToolkit\Build\Console\ImportFolderCommand', 
+			'XfToolkit\Build\Console\ComposerUpdateCommand',
 			'XfToolkit\Build\Console\ExportCommand',
 			'XfToolkit\Build\Console\BuildCommand'
 		);

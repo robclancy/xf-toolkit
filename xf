@@ -7,7 +7,7 @@ $app = XfToolkit\Console\Application::start();
 
 $app->registerServices(
 	new XfToolkit\Tools\ToolsServiceProvider,
-	//new XfToolkit\FileSync\FileSyncServiceProvider,
+	new XfToolkit\FileSync\FileSyncServiceProvider,
 	new XfToolkit\AddOn\AddOnServiceProvider,
 	new XfToolkit\Build\BuildServiceProvider
 );
