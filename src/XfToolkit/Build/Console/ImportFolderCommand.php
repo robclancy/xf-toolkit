@@ -45,7 +45,7 @@ class ImportFolderCommand extends Command {
 
 		if ( ! empty($config->includes))
 		{
-			$this->copyIncludes($config->includes, $directory);
+			$this->copyIncludes($config->includes, $directory, $this->application->getXfPath());
 		}
 
 		$xmlPath = $this->buildAddOn($directory, $config);
@@ -135,12 +135,14 @@ class ImportFolderCommand extends Command {
 		}
 	}
 
-	protected function copyIncludes($includes, $directory)
+	protected function copyIncludes($includes, $source, $destination)
 	{
 		$this->info('Copying extra includes');
-		foreach ($includes AS $dir)
+		foreach ($includes AS $include)
 		{
-			$this->fileSystem->copyDirectory($directory.'/'.$dir, $this->application->getXfPath());
+			$copy = is_dir($include) ? 'copyDirectory' : 'copy';
+
+			$this->fileSystem->$copy($source.'/'.$include, $destination.'/'.$include);
 		}
 	}
 

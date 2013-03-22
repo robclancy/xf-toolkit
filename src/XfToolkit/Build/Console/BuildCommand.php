@@ -47,7 +47,7 @@ class BuildCommand extends Command {
 
 		if ( ! empty($config->includes))
 		{
-			$this->copyIncludes($config->includes, $directory);
+			$this->copyIncludes($config->includes, '.', $directory.'/upload');
 		}
 
 		if ($config->composer)
@@ -147,12 +147,14 @@ class BuildCommand extends Command {
 	}
 
 	// FIXME: more copy
-	protected function copyIncludes($includes, $directory)
+	protected function copyIncludes($includes, $source, $destination)
 	{
 		$this->info('Copying extra includes');
-		foreach ($includes AS $dir)
+		foreach ($includes AS $include)
 		{
-			$this->fileSystem->copyDirectory($directory.'/'.$dir, $this->application->getXfPath());
+			$copy = is_dir($include) ? 'copyDirectory' : 'copy';
+
+			$this->fileSystem->$copy($source.'/'.$include, $destination.'/'.$include);
 		}
 	}
 

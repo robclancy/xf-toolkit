@@ -5,7 +5,7 @@ use Illuminate\Container\Container;
 
 class Application extends App {
 
-	protected $xfRoot;
+	protected $xfPath;
 
 	protected $xfLib;
 
@@ -68,7 +68,7 @@ class Application extends App {
 		}
 
 		// TODO: do this better as library won't always be in the root xf directory
-		$this->xfPath = $this->xfLib.'/../';
+		$this->xfPath = realpath($this->xfLib).'/../';
 	}
 
 	public function getXfLibPath()
@@ -78,7 +78,7 @@ class Application extends App {
 
 	public function getXfPath()
 	{
-		return $this->xfRoot;
+		return $this->xfPath;
 	}
 
 	public function setContainer(Container $container)
