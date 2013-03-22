@@ -45,6 +45,11 @@ class BuildCommand extends Command {
 		$this->fileSystem->makeDirectory($directory.'/upload');
 		$this->fileSystem->copyDirectory($config->library.'/../../', $directory.'/upload/library/');
 
+		if ( ! empty($config->includes))
+		{
+			$this->copyIncludes($config->includes, $directory);
+		}
+
 		if ($config->composer)
 		{
 			$this->info('Updating dependencies');
@@ -139,6 +144,16 @@ class BuildCommand extends Command {
 		{
 			$this->fileSystem->copyDirectory($lib, $this->application->getXfLibPath());
 		}*/
+	}
+
+	// FIXME: more copy
+	protected function copyIncludes($includes, $directory)
+	{
+		$this->info('Copying extra includes');
+		foreach ($includes AS $dir)
+		{
+			$this->fileSystem->copyDirectory($directory.'/'.$dir, $this->application->getXfPath());
+		}
 	}
 
 	// FIXME: also copied, mostly

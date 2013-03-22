@@ -5,6 +5,8 @@ use Illuminate\Container\Container;
 
 class Application extends App {
 
+	protected $xfRoot;
+
 	protected $xfLib;
 
 	protected $container;
@@ -64,11 +66,19 @@ class Application extends App {
 		{
 			throw new \Exception('Couldn\'t locate XenForo install.');
 		}
+
+		// TODO: do this better as library won't always be in the root xf directory
+		$this->xfPath = $this->xfLib.'/../';
 	}
 
 	public function getXfLibPath()
 	{
 		return $this->xfLib;
+	}
+
+	public function getXfPath()
+	{
+		return $this->xfRoot;
 	}
 
 	public function setContainer(Container $container)

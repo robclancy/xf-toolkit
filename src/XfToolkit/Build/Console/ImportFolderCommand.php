@@ -43,6 +43,11 @@ class ImportFolderCommand extends Command {
 			$this->copyDependencies($directory);
 		}
 
+		if ( ! empty($config->includes))
+		{
+			$this->copyIncludes($config->includes, $directory);
+		}
+
 		$xmlPath = $this->buildAddOn($directory, $config);
 		
 		$this->call('addon:install', array('file' => array($xmlPath), '--update-if-exists' => true));
@@ -85,6 +90,7 @@ class ImportFolderCommand extends Command {
 			'templates' => $directory.'/templates',
 			'composer' => false,
 			'installer' => false,
+			'includes' => array(),
 		);
 
 		foreach ($defaults AS $key => $value)
@@ -126,6 +132,15 @@ class ImportFolderCommand extends Command {
 		foreach ($libs AS $lib)
 		{
 			$this->fileSystem->copyDirectory($lib, $this->application->getXfLibPath());
+		}
+	}
+
+	protected function copyIncludes($includes, $directory)
+	{
+		$this->info('Copying extra includes');
+		foreach ($includes AS $dir)
+		{
+			$this->fileSystem->copyDirectory($directory.'/'.$dir, $this->application->getXfPath());
 		}
 	}
 
