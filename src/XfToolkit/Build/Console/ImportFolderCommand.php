@@ -162,14 +162,14 @@ class ImportFolderCommand extends Command {
 		}
 
 		$xml .= "\n<templates>";
-		foreach ($this->fileSystem->glob($config->templates.'/*.') AS $file)
+		foreach ($this->fileSystem->glob($config->templates.'/*.xml') AS $file)
 		{
 			$xml .= "\n".file_get_contents($file);
 		}
 		$xml .= "\n</templates>";
 
 		$xml .= "\n<admin_templates>";
-		foreach ($this->fileSystem->glob($config->templates.'/admin/*.') AS $file)
+		foreach ($this->fileSystem->glob($config->templates.'/admin/*.xml') AS $file)
 		{
 			$xml .= $xml .= "\n".file_get_contents($file);
 		}
