@@ -56,6 +56,12 @@ class ExportCommand extends Command {
 			throw new \RuntimeException('Template Directory doesn\'t exist');
 		}
 
+		if ($lib = $this->argument('library'))
+		{
+			// TODO: info
+			$this->fileSystem->copyDirectory($lib, $directory.'/'.$config->library);
+		}
+
 		$this->fileSystem->cleanDirectory($this->dataDirectory);
 
 		$dataTypes = array(
@@ -300,6 +306,7 @@ class ExportCommand extends Command {
 		return array(
 			array('addon-id', InputArgument::REQUIRED, 'Add-on ID you wish to export'),
 			array('directory', InputArgument::REQUIRED, 'Directory where the xenbuild.json file is located'),
+			array('library', InputArgument::REQUIRED, ''),
 		);
 	}
 

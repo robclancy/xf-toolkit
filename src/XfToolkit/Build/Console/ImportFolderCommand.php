@@ -84,6 +84,7 @@ class ImportFolderCommand extends Command {
 			'data' => $directory.'/data',
 			'templates' => $directory.'/templates',
 			'composer' => false,
+			'installer' => false,
 		);
 
 		foreach ($defaults AS $key => $value)
@@ -149,10 +150,10 @@ class ImportFolderCommand extends Command {
 		$addon->setAttribute('version_string', str_replace('{revision}', $revision, $config->version));
 		$addon->setAttribute('version_id', str_replace('{revision}', $revision, $config->version_id));
 		$addon->setAttribute('url', str_replace('{revision}', $revision, $config->website));
-		$addon->setAttribute('install_callback_class', '');
-		$addon->setAttribute('install_callback_method', '');
-		$addon->setAttribute('uninstall_callback_class', '');
-		$addon->setAttribute('uninstall_callback_method', '');
+		$addon->setAttribute('install_callback_class', $config->installer);
+		$addon->setAttribute('install_callback_method', $config->installer ? 'install' : '');
+		$addon->setAttribute('uninstall_callback_class', $config->installer);
+		$addon->setAttribute('uninstall_callback_method', $config->installer ? 'uninstall' : '');
 
 		$xml = str_replace('/>', '>', $dom->saveXML());
 		foreach ($this->fileSystem->glob($config->data.'/*.xml') AS $file)

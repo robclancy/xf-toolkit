@@ -45,12 +45,15 @@ class BuildCommand extends Command {
 		$this->fileSystem->makeDirectory($directory.'/upload');
 		$this->fileSystem->copyDirectory($config->library.'/../../', $directory.'/upload/library/');
 
-		$this->info('Updating dependencies');
-		$libs = $this->getDependencies('.');
-		$this->info('Copying dependencies into library');
-		foreach ($libs AS $lib)
+		if ($config->composer)
 		{
-			$this->fileSystem->copyDirectory($lib, $directory.'/upload/library');
+			$this->info('Updating dependencies');
+			$libs = $this->getDependencies('.');
+			$this->info('Copying dependencies into library');
+			foreach ($libs AS $lib)
+			{
+				$this->fileSystem->copyDirectory($lib, $directory.'/upload/library');
+			}
 		}
 
 		$this->info('Creating zip');
@@ -100,6 +103,7 @@ class BuildCommand extends Command {
 			'website' => '',
 			'data' => $directory.'/data',
 			'templates' => $directory.'/templates',
+			'installer' => false,
 		);
 
 		foreach ($defaults AS $key => $value)
@@ -159,10 +163,10 @@ class BuildCommand extends Command {
 		$addon->setAttribute('version_string', str_replace('{revision}', $revision, $config->version));
 		$addon->setAttribute('version_id', str_replace('{revision}', $revision, $config->version_id));
 		$addon->setAttribute('url', str_replace('{revision}', $revision, $config->website));
-		$addon->setAttribute('install_callback_class', '');
-		$addon->setAttribute('install_callback_method', '');
-		$addon->setAttribute('uninstall_callback_class', '');
-		$addon->setAttribute('uninstall_callback_method', '');
+		$addon->setAttribute('install_callback_class', $config->installer);
+		$addon->setAttribute('install_callback_method', $config->installer ? 'install' : '');
+		$addon->setAttribute('uninstall_callback_class', $config->installer);
+		$addon->setAttribute('uninstall_callback_method', $config->installer ? 'uninstall' : '');
 
 		$xml = str_replace('/>', '>', $dom->saveXML());
 		foreach ($this->fileSystem->glob($config->data.'/*.xml') AS $file)
