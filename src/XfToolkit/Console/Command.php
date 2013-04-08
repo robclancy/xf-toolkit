@@ -54,7 +54,7 @@ class Command extends BaseCommand {
 	 * @param  int 	   $verbosity
 	 * @return void
 	 */
-	protected function line($string = '', $verbosity = 1)
+	public function line($string = '', $verbosity = 1)
 	{
 		if ($this->getVerbosity() >= $verbosity)
 		{
@@ -69,7 +69,7 @@ class Command extends BaseCommand {
 	 * @param  int 	   $verbosity
 	 * @return void
 	 */
-	protected function info($string, $verbosity = 1)
+	public function info($string, $verbosity = 1)
 	{
 		if ($this->getVerbosity() >= $verbosity)
 		{
@@ -84,7 +84,7 @@ class Command extends BaseCommand {
 	 * @param  int 	   $verbosity
 	 * @return void
 	 */
-	protected function comment($string, $verbosity = 1)
+	public function comment($string, $verbosity = 1)
 	{
 		if ($this->getVerbosity() >= $verbosity)
 		{
@@ -99,7 +99,7 @@ class Command extends BaseCommand {
 	 * @param  int 	   $verbosity
 	 * @return void
 	 */
-	protected function question($string, $verbosity = 1)
+	public function question($string, $verbosity = 1)
 	{
 		if ($this->getVerbosity() >= $verbosity)
 		{
@@ -114,7 +114,7 @@ class Command extends BaseCommand {
 	 * @param  int 	   $verbosity
 	 * @return void
 	 */
-	protected function error($string, $verbosity = 1)
+	public function error($string, $verbosity = 1)
 	{
 		if ($this->getVerbosity() >= $verbosity)
 		{
