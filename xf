@@ -7,6 +7,12 @@ $app = XfToolkit\Toolkit::start();
 
 $commands = [
 	'XfToolkit\Commands\SelfUpdate',
+
+	'XfToolkit\Commands\Dev\Sync',
+
+	'XfToolkit\Commands\AddOn\Install',
+
+	'XfToolkit\Commands\Rebuild'
 ];
 
 $app->resolveCommands($commands);

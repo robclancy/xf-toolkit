@@ -18,6 +18,7 @@ try
 {
 	$toolkit->detectXenForo();
 
+	require_once $toolkit->getXfPath().'/vendor/autoload.php';
 	require_once $toolkit->getXfLibPath().'/XenForo/Autoloader.php';
 	XenForo_Autoloader::getInstance()->setupAutoloader($toolkit->getXfLibPath());
 
