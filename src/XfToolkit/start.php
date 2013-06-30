@@ -11,7 +11,7 @@ $hackySkipXenForo = array(
 );
 if ( ! isset($_SERVER['argv'][1]) OR in_array($_SERVER['argv'][1], $hackySkipXenForo))
 {
-	return $application;
+	return $toolkit;
 }
 
 try 
