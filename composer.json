@@ -10,16 +10,10 @@
 		}
 	],
 	"require": {
-		"php": ">=5.3.0",
+		"php": ">=5.4.0",
 		"illuminate/container": "4.0.x",
         "illuminate/console": "4.0.x",
 		"illuminate/filesystem": "4.0.x"
-	},
-	"replace": {
-		"xf-console": "self.version",
-		"xf-tools": "self.version",
-		"xf-files": "self.version",
-		"xf-build": "self.version"
 	},
 	"require-dev": {
 		 "mockery/mockery": "0.7.2"

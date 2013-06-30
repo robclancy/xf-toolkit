@@ -3,13 +3,12 @@
 
 require __DIR__.'/vendor/autoload.php';
 
-$app = XfToolkit\Console\Application::start();
+$app = XfToolkit\Toolkit::start();
 
-$app->registerServices(
-	new XfToolkit\Tools\ToolsServiceProvider,
-	new XfToolkit\FileSync\FileSyncServiceProvider,
-	new XfToolkit\AddOn\AddOnServiceProvider,
-	new XfToolkit\Build\BuildServiceProvider
-);
+$commands = [
+	'XfToolkit\Commands\SelfUpdate',
+];
+
+$app->resolveCommands($commands);
 
 $app->run();
