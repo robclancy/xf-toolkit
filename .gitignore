@@ -3,4 +3,3 @@ composer.phar
 .DS_Store
 *.komodoproject
 *.komodotools
-src/XfToolkit/old
