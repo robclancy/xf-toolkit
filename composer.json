@@ -11,10 +11,10 @@
 	],
 	"require": {
 		"php": ">=5.4.0",
-		"illuminate/container": "4.0.x",
-        "illuminate/console": "4.0.x",
-		"illuminate/filesystem": "4.0.x",
-        "illuminate/support": "4.0.x"
+		"illuminate/container": "4.1.x",
+        "illuminate/console": "4.1.x",
+		"illuminate/filesystem": "4.1.x",
+        "illuminate/support": "4.1.x"
 	},
 	"require-dev": {
 		 "mockery/mockery": "0.7.2"

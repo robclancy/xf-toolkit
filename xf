@@ -3,4 +3,6 @@
 
 require __DIR__.'/vendor/autoload.php';
 
-XfToolkit\Toolkit::start()->run();
+$toolkit = XfToolkit\Toolkit::start();
+
+$toolkit->run();

@@ -21,6 +21,8 @@ class Toolkit extends App {
 
 		$container['app'] = $this;
 		$container->alias('app', 'XfToolkit\Toolkit');
+
+		$this->registerToolkitCommands();
 	}
 
 	/**
@@ -33,14 +35,14 @@ class Toolkit extends App {
 		return require __DIR__.'/start.php';
 	}
 
-	public function registerServices($providers)
+	public function registerToolkitCommands()
 	{
-		$providers = is_array($providers) ? $providers : func_get_args();
-
-		foreach ($providers AS $provider)
-		{
-			$provider->register($this);
-		}
+		$this->resolveCommands(
+			'XfToolkit\Commands\SelfUpdate',
+			'XfToolkit\Commands\Rebuild',
+			'XfToolkit\Commands\Dev\Build',
+			'XfToolkit\Commands\Dev\Sync'
+		);
 	}
 
 	public function detectXenForo()
