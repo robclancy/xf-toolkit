@@ -102,7 +102,7 @@ class Toolkit extends App {
 
 		$defaults = array(
 			'version_id' => '{revision}',
-			'library' => false,
+			'files' => array(),
 			'installer' => false,
 			'website' => '',
 			'data' => $directory.'/addon',
@@ -120,10 +120,10 @@ class Toolkit extends App {
 			}
 		}
 
-		if ($config->library AND ! $config->installer AND file_exists($directory.'/'.$config->library.'/Installer.php'))
+		/*if ($config->library AND ! $config->installer AND file_exists($directory.'/'.$config->library.'/Installer.php'))
 		{
 			$config->installer = $config->library.'/Installer.php';
-		}
+		}*/
 
 		$this->config = $config;
 	}

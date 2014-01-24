@@ -1,5 +1,0 @@
-while [ 1 ];
-do
-	php xf file:sync --looping;
-	sleep 1;
-done

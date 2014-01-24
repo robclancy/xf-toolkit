@@ -26,7 +26,26 @@ class Build extends Command {
     {
         $config = $this->application->getConfig();
 
-        // TODO: composer
+        if ($config->composer)
+        {
+            $this->fileSystem->deleteDirectory('vendor_temp');
+            $this->fileSystem->delete('composer.lock.temp');
+
+            $this->info('Creating production dependencies');
+            $this->fileSystem->move('vendor', 'vendor_temp');
+            $this->line('   - running composer and saving to dependencies');
+
+            $handle = popen('composer install --no-dev', 'r');
+            while ( ! feof($handle))
+            {
+                $this->write('     '.fread($handle, 1024));
+            }
+            fclose($handle);
+
+            $this->fileSystem->deleteDirectory('vendor');
+            $this->fileSystem->move('vendor_temp', 'vendor');
+            $this->line('');
+        }
 
         $this->info('Creating upload directory');
 
@@ -37,6 +56,21 @@ class Build extends Command {
         {
             $this->line('   - copying '.$libraryPath.' into build/upload/'.$libraryPath);
             $this->fileSystem->copyDirectory($libraryPath, 'build/upload/'.$libraryPath);
+        }
+
+        if ($config->composer)
+        {
+            $dependencies = require getcwd().'/dependencies/composer/autoload_namespaces.php';
+
+            foreach ($dependencies as $dependency)
+            {
+                $dependency = str_replace(getcwd().'/', '', $dependency[0]);
+
+                $this->line('   - copying '.$dependency.' into build/upload/library');
+                $this->fileSystem->copyDirectory($dependency, 'build/upload/library', true);
+            }
+
+            $this->fileSystem->deleteDirectory('vendor_temp');
         }
 
         $jsPath = 'js/'.snake_case($config->vendor);
@@ -65,9 +99,14 @@ class Build extends Command {
             }
         }
 
+        // rename vendor to vendor_temp
+
+        // run composer install --no-dev
+
         if ($config->file_health_class)
         {
             $file = 'build/upload/library/'.str_replace(['\\', '_'], '/', $config->file_health_class).'.php';
+            @unlink($file);
             $contents = FileHasher::getHashClassCode($config->file_health_class, FileHasher::hashDirectory('build/upload', ['.php', '.js']), [$file]);
             
             $this->line('   - writing file sums to '.$file);
@@ -87,8 +126,8 @@ class Build extends Command {
         $addon = $dom->createElement('addon');
         $dom->appendChild($addon);
 
-        // NOTE: we start at 1000+ to use nicer longer numbers in the installer and to avoid collisions with old->new system.
-        $revision = 1000+(int)trim(shell_exec('git rev-list HEAD | wc -l'));
+        // NOTE: we start at 1100+ to use nicer longer numbers and to avoid collisions with older stuff
+        $revision = 1100+(int)trim(shell_exec('git rev-list HEAD | wc -l'));
 
         $addon->setAttribute('addon_id', $config->id);
         $addon->setAttribute('title', $config->name);

@@ -47,7 +47,7 @@ class Sync extends Command {
 		$dom->appendChild($addon);
 
 		// TODO: this kind of stuff I should be doing and pushing to the repo the number instead?
-		$revision = (int)trim(shell_exec('git rev-list HEAD | wc -l'));
+		$revision = 1000 + trim(shell_exec('git rev-list HEAD | wc -l'));
 		if (empty($revision))
 		{
 			$revision = 'unknown';
@@ -88,7 +88,7 @@ class Sync extends Command {
 
 		$xml .= "\n\n</addon>";
 
-		$xmlPath = $directory.'/addon.xml';
+		$xmlPath = $directory.'/../addon.xml';
 		$this->fileSystem->put($xmlPath, $xml);
 
 		$this->line('');

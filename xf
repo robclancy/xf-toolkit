@@ -3,19 +3,4 @@
 
 require __DIR__.'/vendor/autoload.php';
 
-$app = XfToolkit\Toolkit::start();
-
-$commands = [
-	'XfToolkit\Commands\SelfUpdate',
-
-    'XfToolkit\Commands\Dev\Build',
-	'XfToolkit\Commands\Dev\Sync',
-
-	'XfToolkit\Commands\AddOn\Install',
-
-	'XfToolkit\Commands\Rebuild'
-];
-
-$app->resolveCommands($commands);
-
-$app->run();
+XfToolkit\Toolkit::start()->run();

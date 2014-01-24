@@ -44,4 +44,17 @@ catch (Exception $e)
 	exit;
 }
 
+$commands = [
+	'XfToolkit\Commands\SelfUpdate',
+
+    'XfToolkit\Commands\Dev\Build',
+	'XfToolkit\Commands\Dev\Sync',
+
+	'XfToolkit\Commands\AddOn\Install',
+
+	'XfToolkit\Commands\Rebuild'
+];
+
+$toolkit->resolveCommands($commands);
+
 return $toolkit;
