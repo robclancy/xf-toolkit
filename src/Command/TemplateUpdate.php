@@ -19,6 +19,7 @@ class TemplateUpdate extends Base {
     
     // $name, $shortcut, $mode, $description, $default
     protected $options = [
+        ['file', null, InputOption::VALUE_REQUIRED, 'Template file, if specified the template argument is ignored', null],
         ['admin', null, InputOption::VALUE_NONE, 'Template is for admin', null],
         ['addon-id', null, InputOption::VALUE_REQUIRED, 'AddOn this template belongs to', null],
         ['create-if-not-exists', null, InputOption::VALUE_NONE, 'Create template if it doesn\'t exist.', null]
@@ -48,7 +49,7 @@ class TemplateUpdate extends Base {
         $template = $templateModel->getTemplateInStyleByTitle($this->argument('title'));
         if ($template)
         {
-            return $this->line($this->xenforo->updateTemplate($template['template_id'], $this->argument('title'), $this->argument('template'), $this->option('addon-id')));
+            return $this->line($this->xenforo->updateTemplate($template['template_id'], $this->argument('title'), $this->getTemplateContents(), $this->option('addon-id')));
         }
         
         if ( ! $this->option('create-if-not-exists'))
@@ -58,7 +59,7 @@ class TemplateUpdate extends Base {
         
         //$this->line('Template doesn\'t exist, creating');
         
-        return $this->line($this->xenforo->createTemplate($this->argument('title'), $this->argument('template'), $this->option('addon-id')));
+        return $this->line($this->xenforo->createTemplate($this->argument('title'), $this->getTemplateContents(), $this->option('addon-id')));
     }
     
     public function updateAdminTemplate()
@@ -68,7 +69,7 @@ class TemplateUpdate extends Base {
         $template = $templateModel->getAdminTemplateByTitle($this->argument('title'));
         if ($template)
         {
-            return $this->line($this->xenforo->updateAdminTemplate($template['template_id'], $this->argument('title'), $this->argument('template'), $this->option('addon-id')));
+            return $this->line($this->xenforo->updateAdminTemplate($template['template_id'], $this->argument('title'), $this->getTemplateContents(), $this->option('addon-id')));
         }
         
         if ( ! $this->option('create-if-not-exists'))
@@ -78,7 +79,17 @@ class TemplateUpdate extends Base {
         
         //$this->line('Template doesn\'t exist, creating');
         
-        return $this->line($this->xenforo->createAdminTemplate($this->argument('title'), $this->argument('template'), $this->option('addon-id')));
+        return $this->line($this->xenforo->createAdminTemplate($this->argument('title'), $this->getTemplateContents(), $this->option('addon-id')));
+    }
+    
+    protected function getTemplateContents()
+    {
+        if ($this->option('file'))
+        {
+            return $this->file->get($this->option('file'));
+        }
+        
+        return $this->argument('template');
     }
 }
 

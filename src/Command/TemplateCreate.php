@@ -1,12 +1,15 @@
 <?php namespace Robbo\XfToolkit\Command;
 
 use Robbo\XfToolkit\XenForo;
+use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
 class TemplateCreate extends Base {
     
     protected $xenforo;
+    
+    protected $file;
     
     protected $name = 'template:create';
     
@@ -19,14 +22,16 @@ class TemplateCreate extends Base {
     
     // $name, $shortcut, $mode, $description, $default
     protected $options = [
+        ['file', null, InputOption::VALUE_REQUIRED, 'Template file, if specified the template argument is ignored', null],
         ['admin', null, InputOption::VALUE_NONE, 'Template is for admin', null],
         ['addon-id', null, InputOption::VALUE_REQUIRED, 'AddOn this template belongs to', null],
         ['update-if-exists', null, InputOption::VALUE_NONE, 'Update template if it already exists.', null]
     ];
     
-    public function __construct(XenForo $xenforo)
+    public function __construct(XenForo $xenforo, Filesystem $file)
     {
         $this->xenforo = $xenforo;
+        $this->file = $file;
         
         parent::__construct();
     }
@@ -55,10 +60,10 @@ class TemplateCreate extends Base {
             
             //$this->line('Template already exists, updating');
             
-            return $this->line($this->xenforo->updateTemplate($template['template_id'], $this->argument('title'), $this->argument('template'), $this->option('addon-id')));
+            return $this->line($this->xenforo->updateTemplate($template['template_id'], $this->argument('title'), $this->getTemplateContents(), $this->option('addon-id')));
         }
         
-        return $this->line($this->xenforo->createTemplate($this->argument('title'), $this->argument('template'), $this->option('addon-id')));
+        return $this->line($this->xenforo->createTemplate($this->argument('title'), $this->getTemplateContents(), $this->option('addon-id')));
     }
     
     public function createAdminTemplate()
@@ -75,10 +80,20 @@ class TemplateCreate extends Base {
             
             //$this->line('Template already exists, updating');
             
-            return $this->line($this->xenforo->updateAdminTemplate($template['template_id'], $this->argument('title'), $this->argument('template'), $this->option('addon-id')));
+            return $this->line($this->xenforo->updateAdminTemplate($template['template_id'], $this->argument('title'), $this->getTemplateContents(), $this->option('addon-id')));
         }
         
-        return $this->line($this->xenforo->createAdminTemplate($this->argument('title'), $this->argument('template'), $this->option('addon-id')));
+        return $this->line($this->xenforo->createAdminTemplate($this->argument('title'), $this->getTemplateContents(), $this->option('addon-id')));
+    }
+    
+    protected function getTemplateContents()
+    {
+        if ($this->option('file'))
+        {
+            return $this->file->get($this->option('file'));
+        }
+        
+        return $this->argument('template');
     }
 }
 
