@@ -90,7 +90,7 @@ class TemplateCreate extends Base {
     {
         if ($this->option('file'))
         {
-            return $this->file->get(getwd().'/'.$this->option('file'));
+            return $this->file->get($this->option('file'));
         }
         
         return $this->argument('template');

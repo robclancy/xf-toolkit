@@ -1,6 +1,7 @@
 <?php namespace Robbo\XfToolkit\Command;
 
 use Robbo\XfToolkit\XenForo;
+use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -25,9 +26,10 @@ class TemplateUpdate extends Base {
         ['create-if-not-exists', null, InputOption::VALUE_NONE, 'Create template if it doesn\'t exist.', null]
     ];
     
-    public function __construct(XenForo $xenforo)
+    public function __construct(XenForo $xenforo, Filesystem $file)
     {
         $this->xenforo = $xenforo;
+        $this->file = $file;
         
         parent::__construct();
     }
