@@ -20,8 +20,8 @@
 		 "mockery/mockery": "0.7.2"
 	},
 	"autoload": {
-        "psr-0": {
-            "XfToolkit": "src/"
+        "psr-4": {
+            "Robbo\\XfToolkit\\": "src"
         }
     },
 	"extra": {

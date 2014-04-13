@@ -3,6 +3,6 @@
 
 require __DIR__.'/vendor/autoload.php';
 
-$toolkit = XfToolkit\Toolkit::start();
+$application = Robbo\XfToolkit\Application::start();
 
-$toolkit->run();
+$application->run();
