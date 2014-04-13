@@ -10,14 +10,14 @@ abstract class Base extends Command {
     protected $options = [];
     
     public function call($command, array $arguments = [], array $options = [])
-	{
+    {
         foreach ($options as $option => $value)
         {
             $arguments['--'.$option] = $value;
-        }print_r($arguments);
+        }
         
         return parent::call($command, $arguments);
-	}
+    }
     
     protected function getArguments()
     {
