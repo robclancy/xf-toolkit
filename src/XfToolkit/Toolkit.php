@@ -49,11 +49,13 @@ class Toolkit extends App {
 	{
 		$dir = getcwd();
 
-		// Check for a library folder
-		// TODO: Possibly other checks here later if needed
 		if (file_exists($dir.'/library'))
 		{
 			$this->xfLib = $dir.'/library';
+		}
+		else if (file_exists($dir.'/xenforo/library'))
+		{
+			$this->xfLib = $dir.'/xenforo/library';
 		}
 
 		if (file_exists($dir.'/addon.json'))
@@ -103,12 +105,13 @@ class Toolkit extends App {
 		}
 
 		$defaults = array(
-			'version_id' => '{revision}',
+			'build' => '{build}',
 			'files' => array(),
 			'installer' => false,
 			'website' => '',
-			'data' => $directory.'/addon',
-			'templates' => $directory.'/addon/templates',
+			'data' => $directory.'/data',
+			'css' => $directory.'/css',
+			'templates' => $directory.'/templates',
 			'composer' => false,
 			'installer' => false,
 			'includes' => array(),
