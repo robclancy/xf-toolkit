@@ -1,0 +1,1 @@
+<?php return Robbo\XfToolkit\Application::start()->run();
