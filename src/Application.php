@@ -23,7 +23,7 @@ class Application extends App {
         $this->registerBundledCommands();
     }
     
-    public static function start()
+    public static function start($app)
     {
         return require __DIR__.'/start.php';
     }
