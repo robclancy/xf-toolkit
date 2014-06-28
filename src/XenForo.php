@@ -84,8 +84,13 @@ class XenForo {
         require_once $this->path.'/library/XenForo/Autoloader.php';
         XenForo_Autoloader::getInstance()->setupAutoloader($this->path.'/library');
         
-        // Try config.php in library then up into xenforo root and then in working directory
-        foreach ([$this->path.'/library', $this->path, getcwd()] as $path)
+        // Config file can be in 4 locations, tries them in order
+        //  - library/config.php
+        //  - config.php
+        //  - {current working directory}/config.php
+        //  - {current working directory}/../config.php
+        $cwd = exec('pwd'); // because getcwd() doesn't work properly with symlinks
+        foreach ([$this->path.'/library', $this->path, $cwd, dirname($cwd)] as $path)
         {
             if ($this->file->exists($path.'/config.php'))
             {
