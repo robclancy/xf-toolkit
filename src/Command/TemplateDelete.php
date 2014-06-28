@@ -43,6 +43,8 @@ class TemplateDelete extends Base {
             $dw = $this->xenforo->dataWriter($this->option('admin') ? 'AdminTemplate' : 'Template');
             $dw->setExistingData($template['template_id']);
             $dw->delete();
+            
+            $this->line('Deleted '.($this->option('admin') ? 'admin ' :'').'template '.$template['title']);
         }
     }
 }

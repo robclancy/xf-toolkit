@@ -11,6 +11,10 @@ class DevSetup extends Base {
     
     protected $description = 'Setup development';
     
+    protected $options = [
+        ['no-guard', null, InputOption::VALUE_NONE, 'Don\'t run guard', null],
+    ];
+    
     public function __construct(XenForo $xenforo)
     {
         $this->xenforo = $xenforo;
@@ -20,9 +24,26 @@ class DevSetup extends Base {
     
     public function fire()
     {
-        if ( ! $this->xenforo->model('AddOn')->getAddOnById($this->xenforo->addon()->id))
+        $existing = $this->xenforo->model('AddOn')->getAddOnById($this->xenforo->addon()->id);
+        
+        $addon = $this->xenforo->addon();
+        $addon = [
+            'addon_id'          => $addon->id,
+            'title'             => $addon->title,
+            'version_string'    => $addon->version,
+            'version_id'        => $addon->version_id,
+            'url'               => $addon->url
+        ];
+        
+        if ($existing)
         {
-            $addon = $this->xenforo->addon();
+            $dw = $this->xenforo->datawriter('AddOn');
+            $dw->setExistingData($addon['addon_id']);
+            $dw->bulkSet($addon);
+            $dw->save();
+        }
+        else
+        {
             $dw = $this->xenforo->datawriter('AddOn');
             $dw->bulkSet([
                 'addon_id'          => $addon->id,
@@ -34,7 +55,10 @@ class DevSetup extends Base {
             $dw->save();
         }
         
-        // force guard to run through everything to sync it
-        exec('echo | bundle exec guard');
+        if ( ! $this->option('no-guard'))
+        {
+            // force guard to run through everything to sync it
+            exec('echo | bundle exec guard');
+        }
     }
 }
