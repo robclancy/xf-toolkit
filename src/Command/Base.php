@@ -1,7 +1,7 @@
 <?php namespace Robbo\XfToolkit\Command;
 
-use Illuminate\Container\Container;
 use Illuminate\Console\Command;
+use Illuminate\Container\Container;
 
 abstract class Base extends Command {
     
