@@ -125,7 +125,7 @@ class XenForo {
         $writer = $this->dataWriter('Template');
         if ($templateId)
         {
-            $writer->setExistingData($templateId);    
+            $writer->setExistingData($templateId);
         }
         
         $writer->bulkSet($data);
