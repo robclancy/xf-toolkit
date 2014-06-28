@@ -2,6 +2,7 @@
 
 use Robbo\XfToolkit\XenForo;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputArgument;
 
 class TemplateDelete extends Base {
     
